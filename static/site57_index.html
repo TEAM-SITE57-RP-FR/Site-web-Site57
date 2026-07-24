@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site-57 — Portail d'accès</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0d0a; --paper:#ded7c4; --paper-dim:#bcb49c; --ink:#1c1a14;
+  --amber:#c98a2c; --red:#8a2b1f; --line: rgba(222,215,196,0.18); --line-strong: rgba(222,215,196,0.35);
+  --font-stamp:'Courier Prime', monospace;
+  --font-body:'Libre Baskerville', serif;
+  --font-eyebrow:'Oswald', sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(60,60,45,0.25), transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(40,30,20,0.3), transparent 60%),
+    var(--bg);
+  color:var(--paper); font-family:var(--font-body); min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:40px 20px; line-height:1.5;
+}
+#siteBanner{
+  display:none; position:fixed; top:0; left:0; right:0;
+  background:var(--red); color:var(--paper); font-family:var(--font-stamp);
+  font-size:12px; letter-spacing:.04em; text-align:center; padding:8px 16px; z-index:10;
+}
+.mark{
+  width:64px;height:64px;border:2px solid var(--amber);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-stamp);font-weight:700;color:var(--amber);font-size:22px;
+  margin-bottom:18px;position:relative;
+}
+.mark::after{content:"";position:absolute;inset:-8px;border:1px solid var(--line);border-radius:50%;}
+h1{
+  font-family:var(--font-eyebrow);text-transform:uppercase;letter-spacing:.08em;
+  font-size:30px;margin:0 0 6px;text-align:center;
+}
+.tagline{
+  font-family:var(--font-stamp);font-size:12.5px;color:var(--paper-dim);
+  letter-spacing:.04em;text-align:center;margin-bottom:48px;
+}
+.portal{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:760px;}
+.door{
+  width:320px;border:1px solid var(--line-strong);background:rgba(255,255,255,0.02);
+  padding:26px 24px;text-decoration:none;color:var(--paper);position:relative;
+  transition:border-color .15s, background .15s;
+}
+.door:hover{border-color:var(--amber);background:rgba(201,138,44,0.06);}
+.door .num{
+  font-family:var(--font-stamp);font-size:11px;color:var(--amber);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:block;
+}
+.door h2{font-family:var(--font-eyebrow);text-transform:uppercase;font-size:19px;margin:0 0 8px;letter-spacing:.03em;}
+.door p{font-size:13px;color:var(--paper-dim);margin:0 0 16px;}
+.door .go{
+  font-family:var(--font-stamp);font-size:11px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--amber);
+}
+.door.admin{border-color:rgba(138,43,31,0.45);}
+.door.admin:hover{border-color:var(--red);background:rgba(138,43,31,0.08);}
+.door.admin .num{color:var(--red);}
+.door.admin .go{color:var(--red);}
+footer{
+  margin-top:50px;font-family:var(--font-stamp);font-size:10.5px;color:var(--paper-dim);
+  text-align:center;letter-spacing:.04em;
+}
+</style>
+</head>
+<body>
+
+<div id="siteBanner"></div>
+
+<div class="mark">57</div>
+<h1 data-site-name>Site-57</h1>
+<div class="tagline" data-site-tagline>Terminal du personnel — accès restreint</div>
+
+<div class="portal">
+  <a class="door" href="site57_membre.html">
+    <span class="num">Accès personnel</span>
+    <h2>Espace Membre</h2>
+    <p>Rôles, recrutement, membres, articles, annonces, idées, hiérarchie, boutique et page libre.</p>
+    <span class="go">Entrer →</span>
+  </a>
+  <a class="door admin" href="site57_admin.html">
+    <span class="num">Accès restreint</span>
+    <h2>Panneau Admin</h2>
+    <p>Configuration du site, gestion des rôles, sanctions et journal, publication d'annonces.</p>
+    <span class="go">Entrer →</span>
+  </a>
+</div>
+
+<footer>Site-57 · Registre interne · Toute donnée saisie ici est stockée à des fins de démonstration uniquement.</footer>
+
+<script src="site57_core.js"></script>
+<script>
+(async function init(){
+  await loadAll();
+  applyBranding();
+})();
+</script>
+</body>
+</html>
