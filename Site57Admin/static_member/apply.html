@@ -1,0 +1,58 @@
+<!-- public application page -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Postuler - Site57</title>
+    <style>
+      body{font-family: Arial, sans-serif;max-width:800px;margin:20px auto;padding:0 10px}
+      .offer{border:1px solid #ddd;padding:10px;margin-bottom:10px}
+      label{display:block;margin-top:8px}
+    </style>
+  </head>
+  <body>
+    <h1>Offres - Postuler</h1>
+    <div id="offers"></div>
+
+    <script>
+      async function fetchOffers(){
+        const res = await fetch('/api/offers');
+        const offers = await res.json();
+        const container = document.getElementById('offers');
+        container.innerHTML='';
+        offers.forEach(o=>{
+          const el = document.createElement('div'); el.className='offer';
+          el.innerHTML = `<h3>${o.title}</h3><p>${o.description||''}</p><button data-id="${o.id}">Postuler</button>`;
+          container.appendChild(el);
+          el.querySelector('button').addEventListener('click', ()=>showForm(o));
+        });
+      }
+      function showForm(offer){
+        const el = document.createElement('div'); el.className='offer';
+        el.innerHTML = `<h3>Postuler pour ${offer.title}</h3>
+          <form id="apply">
+            <input type="hidden" name="offer_id" value="${offer.id}" />
+            <label>Nom: <input name="name" required></label>
+            <label>Email: <input name="email" type="email" required></label>
+            <label>CV (pdf/jpg/png, max 10MB): <input type="file" name="cv"></label>
+            <label>Portfolio (optionnel): <input type="file" name="portfolio"></label>
+            <button type="submit">Envoyer</button>
+          </form>
+          <div id="result"></div>`;
+        const container = document.getElementById('offers');
+        container.prepend(el);
+        const form = el.querySelector('#apply');
+        form.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const fd = new FormData(form);
+          // add sample answers
+          fd.append('answer_why', 'Je suis motivé...');
+          const res = await fetch('/api/applications', {method:'POST', body: fd});
+          const data = await res.json();
+          el.querySelector('#result').textContent = JSON.stringify(data);
+        });
+      }
+      fetchOffers();
+    </script>
+  </body>
+</html>
