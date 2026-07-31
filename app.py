@@ -101,6 +101,28 @@ def create_ticket():
     db.session.commit()
     return redirect(url_for('index'))
 
+# Endpoint for bot to post alerts
+@app.route('/api/bot/alert', methods=['POST'])
+def bot_alert():
+    secret = os.getenv('BOT_SHARED_SECRET', 'change-me')
+    header = request.headers.get('X-BOT-SECRET')
+    if not header or header != secret:
+        return jsonify({'error':'unauthorized'}), 401
+    data = request.get_json() or {}
+    level = data.get('level', 'RP')
+    message = data.get('message', '')
+    socketio.emit('banner_update', {'level': level, 'message': message}, broadcast=True)
+    # Log the bot alert into ModLog for audit
+    try:
+        admin = None
+        ml = ModLog(admin_id=admin, action='bot_alert', target='site', reason=message)
+        db.session.add(ml)
+        db.session.commit()
+    except Exception:
+        # Non-fatal: ignore logging errors
+        pass
+    return jsonify({'status':'ok'}), 200
+
 # SocketIO events
 @socketio.on('connect')
 def on_connect():
