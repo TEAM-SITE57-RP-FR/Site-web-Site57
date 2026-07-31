@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Panneau Admin — Site-57</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <main class="container">
+    <h2>Panneau de Modération</h2>
+    <form method="post">
+      <label>Type d'alerte</label>
+      <select name="level">
+        <option value="HRP">HRP</option>
+        <option value="RP">RP</option>
+        <option value="Code Rouge">Code Rouge</option>
+      </select>
+      <label>Message</label>
+      <input name="message" />
+      <button class="btn" type="submit">Envoyer alerte</button>
+    </form>
+
+    <h3>Tickets récents</h3>
+    <ul>
+      {% for t in tickets %}
+        <li>#{{ t.id }} — {{ t.subject }} — {{ t.status }}</li>
+      {% else %}
+        <li>Aucun ticket</li>
+      {% endfor %}
+    </ul>
+  </main>
+</body>
+</html>
