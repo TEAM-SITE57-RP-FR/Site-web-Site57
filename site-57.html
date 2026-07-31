@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SITE-57 RP FR — Fondation SCP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0a0b0c;
+    --panel:#131417;
+    --panel-2:#1b1d21;
+    --line:#2a2d32;
+    --paper:#e9e4d6;
+    --paper-dim:#c9c3b2;
+    --text:#e8e6e1;
+    --muted:#8a8d92;
+    --red:#c0263a;
+    --red-dim:#5c1420;
+    --amber:#d99a2b;
+    --amber-dim:#5a3f14;
+    --green:#4f8f5c;
+    --green-dim:#1f3a24;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--void);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(192,38,58,0.05), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(79,143,92,0.04), transparent 40%);
+  }
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  ::selection{background:var(--red); color:#fff;}
+
+  /* ---------- redacted text ---------- */
+  .redacted{
+    background:#000; color:transparent; border-radius:2px; padding:0 2px;
+    user-select:none;
+  }
+
+  /* ---------- ticker banner ---------- */
+  #ticker-wrap{
+    position:sticky; top:0; z-index:200;
+    border-bottom:1px solid var(--line);
+    background:var(--panel);
+  }
+  #ticker-mode-row{
+    display:flex; align-items:stretch; font-family:var(--mono); font-size:11px;
+  }
+  .ticker-code{
+    display:flex; align-items:center; gap:6px;
+    padding:6px 12px;
+    font-weight:700; letter-spacing:.06em; white-space:nowrap;
+    color:#fff;
+  }
+  .ticker-code .dot{width:7px; height:7px; border-radius:50%; background:#fff; animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.25}}
+  .code-vert{background:var(--green-dim); border-right:1px solid var(--line);}
+  .code-vert .dot{background:var(--green);}
+  .code-orange{background:var(--amber-dim); border-right:1px solid var(--line);}
+  .code-orange .dot{background:var(--amber);}
+  .code-rouge{background:var(--red-dim); border-right:1px solid var(--line);}
+  .code-rouge .dot{background:var(--red);}
+
+  .ticker-track-outer{flex:1; overflow:hidden; position:relative; background:#000;}
+  .ticker-track{
+    display:flex; align-items:center; white-space:nowrap;
+    animation: scroll-left 22s linear infinite;
+    padding:6px 0;
+  }
+  .ticker-track span{padding:0 28px; font-family:var(--mono); font-size:12px; letter-spacing:.02em;}
+  .ticker-track span.rp{color:var(--paper);}
+  .ticker-track span.hrp{color:var(--amber);}
+  @keyframes scroll-left{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+  .ticker-tabs{display:flex; border-left:1px solid var(--line);}
+  .ticker-tabs button{
+    background:transparent; border:none; color:var(--muted);
+    font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.08em;
+    padding:6px 14px; border-left:1px solid var(--line);
+  }
+  .ticker-tabs button.active{color:#fff; background:var(--panel-2);}
+
+  /* ---------- top nav ---------- */
+  header.main{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, var(--panel), var(--void));
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand .mark{
+    width:38px; height:38px; border:2px solid var(--paper); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-size:20px; color:var(--paper);
+    position:relative;
+  }
+  .brand .mark::after{
+    content:''; position:absolute; inset:6px; border:1px solid var(--red); border-radius:50%;
+  }
+  .brand h1{font-family:var(--display); font-size:26px; letter-spacing:.04em; line-height:1;}
+  .brand .sub{font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;}
+
+  nav.main-links{display:flex; gap:4px; align-items:center; flex-wrap:wrap;}
+  nav.main-links button{
+    background:transparent; border:1px solid transparent; color:var(--muted);
+    font-size:13px; font-weight:600; padding:8px 14px; border-radius:3px;
+    letter-spacing:.02em;
+  }
+  nav.main-links button:hover{color:var(--text); border-color:var(--line);}
+  nav.main-links button.active{color:var(--paper); background:var(--panel-2); border-color:var(--line);}
+  nav.main-links button.danger-link{color:var(--red);}
+
+  .clearance-chip{
+    font-family:var(--mono); font-size:10px; letter-spacing:.06em;
+    border:1px solid var(--line); padding:4px 9px; border-radius:2px; color:var(--muted);
+  }
+
+  main{max-width:1180px; margin:0 auto; padding:36px 24px 80px;}
+  .hide{display:none !important;}
+
+  /* ---------- home ---------- */
+  .doc-panel{
+    background:var(--paper); color:#1c1b17; border-radius:2px;
+    padding:38px 42px; position:relative; overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.5);
+  }
+  .doc-panel::before{
+    content:'FONDATION SCP'; position:absolute; top:14px; right:20px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.15em; color:#8a8368;
+  }
+  .doc-eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.18em; color:#8a3a20; margin-bottom:10px;}
+  .doc-panel h2{font-family:var(--display); font-size:44px; letter-spacing:.02em; margin-bottom:16px;}
+  .doc-panel p{font-size:16px; line-height:1.75; max-width:70ch; color:#3a382f;}
+  .stamp{
+    display:inline-block; margin-top:24px; border:3px solid var(--red); color:var(--red);
+    font-family:var(--display); font-size:20px; letter-spacing:.1em; padding:6px 16px;
+    transform:rotate(-4deg); opacity:.85;
+  }
+
+  .status-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:28px;}
+  .status-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:18px;
+    border-top:3px solid var(--muted);
+  }
+  .status-card h4{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--muted); margin-bottom:8px; text-transform:uppercase;}
+  .status-card .val{font-family:var(--display); font-size:24px; letter-spacing:.02em;}
+
+  .section-title{
+    font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted); margin:44px 0 14px; display:flex; align-items:center; gap:10px;
+  }
+  .section-title::after{content:''; flex:1; height:1px; background:var(--line);}
+
+  .faction-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px;}
+  .faction-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:16px;
+    transition:border-color .15s;
+  }
+  .faction-card:hover{border-color:var(--paper-dim);}
+  .faction-card h5{font-family:var(--sans); font-weight:700; font-size:14px; margin-bottom:6px;}
+  .faction-card p{font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .faction-card .tag{
+    display:inline-block; font-family:var(--mono); font-size:9px; letter-spacing:.08em;
+    padding:2px 7px; border-radius:2px; margin-bottom:8px; text-transform:uppercase;
+  }
+  .tag.found{background:var(--green-dim); color:#a8d4ae;}
+  .tag.hostile{background:var(--red-dim); color:#eda9b1;}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:3px;
+    font-size:13px; font-weight:600; border:1px solid var(--line); background:var(--panel-2); color:var(--text);
+  }
+  .btn:hover{border-color:var(--paper-dim);}
+  .btn-primary{background:var(--red); border-color:var(--red); color:#fff;}
+  .btn-primary:hover{background:#a41f31;}
+  .btn-ghost{background:transparent;}
+  .btn-sm{padding:6px 12px; font-size:12px;}
+  .btn-block{width:100%; justify-content:center;}
+  .btn[disabled]{opacity:.4; cursor:not-allowed;}
+
+  /* ---------- auth ---------- */
+  .auth-wrap{max-width:460px; margin:20px auto; background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:32px;}
+  .auth-tabs{display:flex; margin-bottom:24px; border:1px solid var(--line); border-radius:4px; overflow:hidden;}
+  .auth-tabs button{flex:1; padding:10px; background:var(--panel-2); color:var(--muted); font-size:13px; font-weight:600;}
+  .auth-tabs button.active{background:var(--red); color:#fff;}
+  .provider-btn{
+    width:100%; text-align:left; padding:11px 14px; margin-bottom:8px; border-radius:4px;
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text); font-size:13px; font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .provider-btn:hover{border-color:var(--paper-dim);}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px; font-weight:600;}
+  .field input, .field select, .field textarea{
+    width:100%; background:var(--void); border:1px solid var(--line); border-radius:4px;
+    padding:10px 12px; color:var(--text); font-size:13px; font-family:inherit;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--red); outline-offset:1px;}
+  .checkline{display:flex; align-items:flex-start; gap:8px; font-size:12.5px; color:var(--muted); margin:14px 0;}
+  .checkline a{color:var(--paper); text-decoration:underline; cursor:pointer;}
+  .divider{height:1px; background:var(--line); margin:20px 0;}
+  .small-note{font-size:11.5px; color:var(--muted); line-height:1.5;}
+
+  /* ---------- member layout ---------- */
+  .member-shell{display:grid; grid-template-columns:230px 1fr; gap:24px;}
+  .member-nav{display:flex; flex-direction:column; gap:2px;}
+  .member-nav button{
+    text-align:left; background:transparent; border:none; color:var(--muted);
+    padding:10px 12px; border-radius:4px; font-size:13px; font-weight:600;
+    border-left:2px solid transparent;
+  }
+  .member-nav button:hover{background:var(--panel-2); color:var(--text);}
+  .member-nav button.active{background:var(--panel-2); color:var(--paper); border-left-color:var(--red);}
+  .member-nav .grp{font-family:var(--mono); font-size:10px; letter-spacing:.1em; color:#5a5d63; text-transform:uppercase; margin:16px 0 4px; padding:0 12px;}
+  .member-nav .grp:first-child{margin-top:0;}
+
+  .panel-box{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:24px;}
+  .panel-box h3{font-family:var(--display); font-size:24px; letter-spacing:.02em; margin-bottom:4px;}
+  .panel-box .desc{font-size:12.5px; color:var(--muted); margin-bottom:20px;}
+
+  .id-card{
+    display:flex; gap:16px; align-items:center; background:var(--panel-2); border:1px solid var(--line);
+    border-radius:6px; padding:16px; margin-bottom:20px;
+  }
+  .id-avatar{
+    width:56px; height:56px; border-radius:50%; background:var(--void); border:2px solid var(--paper-dim);
+    display:flex; align-items:center; justify-content:center; font-family:var(--display); font-size:22px; color:var(--paper);
+    flex-shrink:0;
+  }
+  .id-info{flex:1;}
+  .id-info .name{font-weight:700; font-size:15px;}
+  .id-info .meta{font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:2px;}
+  .clearance-badge{
+    font-family:var(--mono); font-size:11px; font-weight:700; padding:4px 10px; border-radius:3px;
+    background:var(--red-dim); color:#eda9b1; letter-spacing:.05em;
+  }
+
+  .locked{
+    position:relative; text-align:center; padding:60px 20px; color:var(--muted);
+  }
+  .locked .stamp-deny{
+    display:inline-block; border:3px solid var(--red); color:var(--red); font-family:var(--display);
+    font-size:22px; letter-spacing:.08em; padding:8px 20px; transform:rotate(-5deg); margin-bottom:14px;
+  }
+
+  table.data-table{width:100%; border-collapse:collapse; font-size:13px;}
+  table.data-table th{
+    text-align:left; font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); padding:8px 10px; border-bottom:1px solid var(--line);
+  }
+  table.data-table td{padding:10px; border-bottom:1px solid var(--line); vertical-align:top;}
+  .pill{font-family:var(--mono); font-size:10px; padding:2px 8px; border-radius:20px; font-weight:700; letter-spacing:.04em;}
+  .pill-green{background:var(--green-dim); color:#a8d4ae;}
+  .pill-amber{background:var(--amber-dim); color:#f0c876;}
+  .pill-red{background:var(--red-dim); color:#eda9b1;}
+  .pill-muted{background:var(--panel-2); color:var(--muted); border:1px solid var(--line);}
+
+  .accordion-item{border:1px solid var(--line); border-radius:5px; margin-bottom:8px; overflow:hidden;}
+  .accordion-head{
+    padding:13px 16px; background:var(--panel-2); font-weight:600; font-size:13px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .accordion-head:hover{background:#22252a;}
+  .accordion-body{padding:16px; font-size:13px; line-height:1.7; color:#c8c6c1; white-space:pre-line; display:none;}
+  .accordion-body.open{display:block;}
+
+  .post{border:1px solid var(--line); border-radius:5px; padding:14px 16px; margin-bottom:10px; background:var(--panel-2);}
+  .post .head{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:6px;}
+  .post .body{font-size:13.5px; line-height:1.6;}
+
+  .empty-state{text-align:center; padding:40px 20px; color:var(--muted); font-size:13px;}
+
+  .shared-note{
+    font-family:var(--mono); font-size:10.5px; color:var(--amber); background:var(--amber-dim);
+    border-radius:4px; padding:8px 12px; margin-bottom:16px; display:flex; gap:8px; align-items:center;
+  }
+
+  .banner-live{
+    background:var(--void); border:1px solid var(--line); border-radius:5px; padding:14px 16px; margin-bottom:18px;
+    font-family:var(--mono); font-size:12px;
+  }
+
+  footer{text-align:center; padding:30px; color:var(--muted); font-size:11px; font-family:var(--mono); border-top:1px solid var(--line);}
+
+  @media(max-width:820px){
+    .member-shell{grid-template-columns:1fr;}
+    .status-grid{grid-template-columns:1fr;}
+    header.main{flex-direction:column; gap:12px; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<div id="ticker-wrap">
+  <div id="ticker-mode-row">
+    <div id="code-indicator" class="ticker-code code-vert"><span class="dot"></span><span id="code-label">CODE VERT</span></div>
+    <div class="ticker-track-outer">
+      <div class="ticker-track" id="ticker-track"></div>
+    </div>
+    <div class="ticker-tabs">
+      <button id="tab-rp" class="active" onclick="setTickerMode('rp')">MODE RP</button>
+      <button id="tab-hrp" onclick="setTickerMode('hrp')">MODE HRP</button>
+    </div>
+  </div>
+</div>
+
+<header class="main">
+  <div class="brand">
+    <div class="mark">57</div>
+    <div>
+      <h1>SITE-57 <span style="color:var(--red)">RP</span> FR</h1>
+      <div class="sub">Fondation SCP — Installation classifiée</div>
+    </div>
+  </div>
+  <nav class="main-links" id="main-nav">
+    <button data-view="home" class="active" onclick="showView('home')">Accueil</button>
+    <button data-view="auth" onclick="showView('auth')" id="nav-auth-btn">Connexion</button>
+    <button data-view="member" onclick="showView('member')">Espace Membre</button>
+    <button data-view="admin" class="danger-link hide" id="nav-admin-btn" onclick="showView('admin')">Administration</button>
+  </nav>
+  <div class="clearance-chip" id="clearance-chip">NON IDENTIFIÉ</div>
+</header>
+
+<main>
+
+  <!-- ================= HOME ================= -->
+  <section id="view-home">
+    <div class="doc-panel">
+      <div class="doc-eyebrow">DOCUMENT DÉCLASSIFIÉ — ACCÈS PUBLIC</div>
+      <h2>Bienvenue sur le Site-57</h2>
+      <p>Le Site-57 est situé dans le nord de la France, à une position <strong>inconnue</strong>. Cette installation est classifiée <strong>« TOP SECRET »</strong> par le gouvernement. Fondée en <span class="redacted">■■■■</span> par <span class="redacted">■■■■■■■■</span>, elle contient de nombreuses anomalies hors du commun, potentiellement dangereuses pour l'humanité...</p>
+      <div class="stamp">CLASSIFIÉ</div>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-card" id="home-status-card">
+        <h4>État du confinement</h4>
+        <div class="val" id="home-status-val">Code Vert</div>
+      </div>
+      <div class="status-card">
+        <h4>Effectif en ligne</h4>
+        <div class="val" id="home-online-val">— agents</div>
+      </div>
+      <div class="status-card">
+        <h4>Dernière mise à jour HRP</h4>
+        <div class="val" id="home-hrp-val" style="font-family:var(--mono); font-size:14px;">—</div>
+      </div>
+    </div>
+
+    <div class="section-title">Personnel de la Fondation</div>
+    <div class="faction-grid" id="found-grid"></div>
+
+    <div class="section-title">Groupes d'intérêt (factions hostiles)</div>
+    <div class="faction-grid" id="hostile-grid"></div>
+
+    <div style="text-align:center; margin-top:44px;">
+      <button class="btn btn-primary" onclick="showView('auth')">Rejoindre la Fondation</button>
+    </div>
+  </section>
+
+  <!-- ================= AUTH ================= -->
+  <section id="view-auth" class="hide">
+    <div class="auth-wrap">
+      <div class="auth-tabs">
+        <button id="auth-tab-login" class="active" onclick="setAuthTab('login')">Se connecter</button>
+        <button id="auth-tab-register" onclick="setAuthTab('register')">Créer un compte</button>
+      </div>
+
+      <div id="auth-login">
+        <div class="field">
+          <label>Adresse email</label>
+          <input type="email" id="login-email" placeholder="ton.adresse@email.com">
+        </div>
+        <div class="field">
+          <label>Mot de passe</label>
+          <input type="password" id="login-password" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary btn-block" onclick="loginWithPassword()">Se connecter</button>
+
+        <div style="display:flex; align-items:center; gap:10px; margin:20px 0;">
+          <div style="flex:1; height:1px; background:var(--line);"></div>
+          <span class="small-note">OU</span>
+          <div style="flex:1; height:1px; background:var(--line);"></div>
+        </div>
+
+        <p class="small-note" style="margin-bottom:16px;">Connexion rapide via un fournisseur externe (simulée dans cette maquette — voir note en bas de page).</p>
+        <button class="provider-btn" onclick="mockLogin('Discord')">🎮 Continuer avec Discord</button>
+        <button class="provider-btn" onclick="mockLogin('Roblox')">🧱 Continuer avec Roblox</button>
+        <button class="provider-btn" onclick="mockLogin('Google')">🔎 Continuer avec Google</button>
+        <button class="provider-btn" onclick="mockLogin('Apple')">🍎 Continuer avec Apple</button>
+      </div>
+
+      <div id="auth-register" class="hide">
+        <div class="field">
+          <label>Adresse email</label>
+          <input type="email" id="reg-email" placeholder="ton.adresse@email.com">
+        </div>
+        <div class="field">
+          <label>Mot de passe</label>
+          <input type="password" id="reg-password" placeholder="8 caractères minimum">
+        </div>
+        <div class="field">
+          <label>Confirmer le mot de passe</label>
+          <input type="password" id="reg-password-confirm" placeholder="••••••••">
+        </div>
+        <div class="field">
+          <label>Date de naissance</label>
+          <input type="date" id="reg-birth">
+        </div>
+        <div class="field">
+          <label>Pseudo Discord</label>
+          <input type="text" id="reg-discord" placeholder="ex : chercheur_37#0001">
+        </div>
+        <div class="field">
+          <label>Pseudo Roblox</label>
+          <input type="text" id="reg-roblox" placeholder="ex : Agent_Site57">
+        </div>
+        <label class="checkline">
+          <input type="checkbox" id="reg-rules" style="margin-top:2px;">
+          <span>J'ai lu et j'accepte le <a onclick="openRules()">règlement intérieur</a> du Site-57.</span>
+        </label>
+        <button class="btn btn-primary btn-block" onclick="registerAccount()">Créer mon compte</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RULES MODAL (simple inline panel, not a real modal to keep it accessible) -->
+  <section id="view-rules" class="hide">
+    <button class="btn btn-ghost" onclick="showView('auth')">← Retour</button>
+    <div class="panel-box" style="margin-top:16px;">
+      <h3>📜 Règlement intérieur — Site-57</h3>
+      <p class="desc">Dernière mise à jour : <span id="rules-date"></span> — modifiable à tout moment par le staff.</p>
+      <div style="font-size:13.5px; line-height:1.8; white-space:pre-line; color:#c8c6c1;" id="rules-text"></div>
+    </div>
+  </section>
+
+  <!-- ================= MEMBER SPACE ================= -->
+  <section id="view-member" class="hide">
+    <div id="member-locked" class="locked hide">
+      <div class="stamp-deny">ACCÈS REFUSÉ</div>
+      <p>Vous devez posséder une accréditation valide (compte connecté) pour accéder à cet espace.</p>
+      <button class="btn btn-primary" style="margin-top:16px;" onclick="showView('auth')">Se connecter</button>
+    </div>
+
+    <div id="member-content" class="hide">
+      <div class="id-card">
+        <div class="id-avatar" id="id-avatar">?</div>
+        <div class="id-info">
+          <div class="name" id="id-name">—</div>
+          <div class="meta" id="id-meta">—</div>
+        </div>
+        <div class="clearance-badge" id="id-clearance">NIVEAU 0</div>
+      </div>
+
+      <div class="member-shell">
+        <div class="member-nav" id="member-nav-list">
+          <div class="grp">Recrutement</div>
+          <button data-tab="candidatures" onclick="setMemberTab('candidatures')">Candidatures HRP</button>
+          <div class="grp">Lore & Règles</div>
+          <button data-tab="reglements" onclick="setMemberTab('reglements')">Règlements & Lore</button>
+          <button data-tab="animations" onclick="setMemberTab('animations')">Animations</button>
+          <div class="grp">Communication</div>
+          <button data-tab="messagerie" onclick="setMemberTab('messagerie')">Messagerie</button>
+          <button data-tab="forum" onclick="setMemberTab('forum')">Forum</button>
+          <div class="grp">Communauté</div>
+          <button data-tab="equipe" onclick="setMemberTab('equipe')">Mon Équipe</button>
+          <button data-tab="credits" onclick="setMemberTab('credits')">Équipe du Projet</button>
+          <button data-tab="boutique" onclick="setMemberTab('boutique')">Boutique</button>
+          <div class="grp">Signalement</div>
+          <button data-tab="signalements" onclick="setMemberTab('signalements')">Signalements</button>
+          <button data-tab="avis" onclick="setMemberTab('avis')">Avis & Évaluations</button>
+          <div class="grp">Compte</div>
+          <button data-tab="profil" onclick="setMemberTab('profil')">Mon Profil</button>
+        </div>
+
+        <div class="panel-box" id="member-tab-content"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ADMIN ================= -->
+  <section id="view-admin" class="hide">
+    <div id="admin-locked" class="locked hide">
+      <div class="stamp-deny">NIVEAU 5 REQUIS</div>
+      <p>Cette section est réservée au Conseil O5 et aux Directeurs (Fondateur, Co-Directeur, Managers, Développeurs).</p>
+    </div>
+    <div id="admin-content" class="hide">
+      <div class="section-title">Panneau d'administration — Conseil O5</div>
+      <div class="member-shell">
+        <div class="member-nav" id="admin-nav-list">
+          <button data-tab="status" onclick="setAdminTab('status')">État du site</button>
+          <button data-tab="sanctions" onclick="setAdminTab('sanctions')">Sanctions</button>
+          <button data-tab="logs" onclick="setAdminTab('logs')">Logs</button>
+          <button data-tab="candidatures-admin" onclick="setAdminTab('candidatures-admin')">Candidatures</button>
+          <button data-tab="signalements-admin" onclick="setAdminTab('signalements-admin')">Signalements</button>
+        </div>
+        <div class="panel-box" id="admin-tab-content"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  SITE-57 RP FR — Maquette de démonstration générée pour usage RP/HRP. Les données « partagées » (forum, signalements, avis, logs, état du site) sont visibles par toute personne ouvrant cet artefact.
+</footer>
+
+<script>
+/* ============================================================
+   DATA — factions, règlement, grades (contenu fourni par l'utilisateur)
+   ============================================================ */
+const FOUNDATION = [
+  {name:"Classe-D", tag:"found", desc:"Prisonniers utilisés comme cobayes pour les tests dangereux. But : survivre, obéir ou s'évader."},
+  {name:"Département Scientifique (Sc)", tag:"found", desc:"Chercheurs menant des expériences sur les SCP avec l'aide des Classes-D."},
+  {name:"Sécurité (Sec / SD)", tag:"found", desc:"Gardes responsables du maintien de l'ordre et de la surveillance des zones de confinement."},
+  {name:"Forces d'Intervention Mobiles (FIM)", tag:"found", desc:"Unités d'élite armées, appelées en renfort lors de brèches majeures."},
+  {name:"Département Médical (Med)", tag:"found", desc:"Médecins et psychologues soignant le personnel et évaluant la santé mentale des Classes-D."},
+  {name:"Ingénierie / Logistique", tag:"found", desc:"Équipe technique : portes blindées, systèmes d'alimentation, maintenance générale."},
+  {name:"Affaires Internes (IA)", tag:"found", desc:"Agents secrets traquant les traîtres, espions et abus de pouvoir au sein de la Fondation."},
+  {name:"Direction / Conseil O5", tag:"found", desc:"Commandement suprême. Gère le site et donne les autorisations de test de niveau 4+."},
+];
+const HOSTILE = [
+  {name:"Insurrection du Chaos (CI)", tag:"hostile", desc:"Faction rebelle principale : infiltration, armement des Classes-D, raids militaires."},
+  {name:"Coalition Mondiale Occulte (GOC)", tag:"hostile", desc:"Organisation internationale prônant la destruction des anomalies plutôt que leur confinement."},
+  {name:"La Main du Serpent (SH)", tag:"hostile", desc:"Militants magiques cherchant à libérer les SCP humanoïdes."},
+  {name:"Église du Dieu Brisé / Sarkicistes", tag:"hostile", desc:"Factions religieuses récupérant des anomalies pour leurs rituels."},
+];
+
+const RULES_TEXT = `ARTICLE 1 — COMPORTEMENT ET RESPECT
+1.1. Courtoisie : le respect d'autrui est obligatoire. Insultes, harcèlement, provocation, troll, usurpation d'identité et dénigrement sont strictement interdits.
+1.2. Discours haineux : aucun propos discriminatoire, raciste, sexiste, homophobe, religieux ou politique extrême ne sera toléré.
+1.3. Contenu inapproprié : contenu pornographique, gore, choquant, illégal ou violent formellement interdit.
+
+ARTICLE 2 — UTILISATION DU SITE ET PUBLICATION
+2.1. Spam / Publicité : spam, flood, abus de majuscules et publicité non autorisée sont interdits.
+2.2. Langue : la langue officielle du site est le français.
+2.3. Hors-sujet : merci de respecter les thématiques des espaces de discussion.
+2.4. Propriété intellectuelle : interdiction de s'approprier le travail d'un tiers sans mention de l'auteur.
+
+ARTICLE 3 — SÉCURITÉ ET COMPTES UTILISATEURS
+3.1. Vous êtes seul responsable de l'activité liée à votre compte.
+3.2. Toute tentative de piratage ou d'exploitation de faille entraîne un bannissement définitif.
+3.3. Tout bug découvert doit être signalé au staff immédiatement.
+
+ARTICLE 4 — AUTORITÉ ET MODÉRATION
+4.1. Le staff fait appliquer ce règlement ; ses décisions doivent être respectées.
+4.2. Toute contestation de sanction se fait en privé, jamais publiquement.
+4.3. Sanctions possibles : avertissement, suppression de contenu, suspension temporaire, bannissement définitif.
+
+ARTICLE 5 — MODIFICATION DU RÈGLEMENT
+L'administration se réserve le droit de modifier ce règlement à tout moment.`;
+
+const GRADES = {
+  "Buildeur": ["Recrue Buildeur","Buildeur","Buildeur Senior","Lead Buildeur"],
+  "Modérateur": ["Helper","Modérateur-Test","Modérateur","Modérateur Senior","Chef Modérateur"],
+  "Animateur": ["Apprenti Animateur","Animateur","Animateur Senior","Chef Animateur"],
+  "Morpheur": ["Morpheur Novice","Morpheur","Morpheur Confirmé","Lead Morpheur"]
+};
+
+/* ============================================================
+   STORAGE HELPERS
+   ============================================================ */
+async function storeGet(key, shared){
+  try{ const r = await window.storage.get(key, shared); return r ? JSON.parse(r.value) : null; }
+  catch(e){ return null; }
+}
+async function storeSet(key, value, shared){
+  try{ await window.storage.set(key, JSON.stringify(value), shared); }
+  catch(e){ console.error('storage set failed', e); }
+}
+async function storeListAppend(key, item, shared, max=200){
+  const list = (await storeGet(key, shared)) || [];
+  list.unshift(item);
+  if(list.length > max) list.length = max;
+  await storeSet(key, list, shared);
+  return list;
+}
+
+const SITE_STATUS_KEY = 'site57:status';
+const LOGS_KEY = 'site57:logs';
+const FORUM_KEY = 'site57:forum';
+const REPORTS_KEY = 'site57:reports';
+const REVIEWS_KEY = 'site57:reviews';
+const APPLICATIONS_KEY = 'site57:applications';
+const PROFILE_KEY = 'site57:profile'; // personal (shared:false)
+
+let SITE_STATUS = {
+  rpCode: 'vert',
+  rpMessage: "Aucune anomalie active. Tous les secteurs sont sous contrôle.",
+  hrpMessage: "Aucun problème technique signalé pour le moment.",
+  onlineCount: 12,
+  maintenance:false,
+  maintenanceReason:''
+};
+let PROFILE = null; // { pseudoDiscord, pseudoRoblox, provider, clearance, faction, appliedRoles:[], joinedAt }
+let tickerMode = 'rp';
+let currentMemberTab = 'candidatures';
+let currentAdminTab = 'status';
+
+/* ============================================================
+   INIT
+   ============================================================ */
+async function init(){
+  document.getElementById('rules-date').textContent = new Date().toLocaleDateString('fr-FR');
+  document.getElementById('rules-text').textContent = RULES_TEXT;
+
+  renderFactionGrid('found-grid', FOUNDATION);
+  renderFactionGrid('hostile-grid', HOSTILE);
+
+  const remote = await storeGet(SITE_STATUS_KEY, true);
+  if(remote) SITE_STATUS = remote;
+  else await storeSet(SITE_STATUS_KEY, SITE_STATUS, true);
+
+  PROFILE = await storeGet(PROFILE_KEY, false);
+
+  renderTicker();
+  applyStatusToHome();
+  refreshAuthState();
+}
+
+function renderFactionGrid(elId, list){
+  const el = document.getElementById(elId);
+  el.innerHTML = list.map(f => `
+    <div class="faction-card">
+      <span class="tag ${f.tag}">${f.tag === 'found' ? 'Fondation' : 'Hostile'}</span>
+      <h5>${f.name}</h5>
+      <p>${f.desc}</p>
+    </div>`).join('');
+}
+
+/* ============================================================
+   TICKER
+   ============================================================ */
+function renderTicker(){
+  const codeEl = document.getElementById('code-indicator');
+  const label = document.getElementById('code-label');
+  codeEl.className = 'ticker-code code-' + SITE_STATUS.rpCode;
+  label.textContent = 'CODE ' + SITE_STATUS.rpCode.toUpperCase();
+
+  const track = document.getElementById('ticker-track');
+  const msg = tickerMode === 'rp' ? SITE_STATUS.rpMessage : SITE_STATUS.hrpMessage;
+  const cls = tickerMode === 'rp' ? 'rp' : 'hrp';
+  const prefix = tickerMode === 'rp' ? '[RP] ' : '[HRP] ';
+  const piece = `<span class="${cls}">${prefix}${escapeHtml(msg)}</span>`;
+  track.innerHTML = piece + piece; // duplicated for seamless loop
+
+  document.getElementById('tab-rp').classList.toggle('active', tickerMode === 'rp');
+  document.getElementById('tab-hrp').classList.toggle('active', tickerMode === 'hrp');
+}
+function setTickerMode(m){ tickerMode = m; renderTicker(); }
+
+function applyStatusToHome(){
+  document.getElementById('home-status-val').textContent = 'Code ' + SITE_STATUS.rpCode.charAt(0).toUpperCase() + SITE_STATUS.rpCode.slice(1);
+  document.getElementById('home-online-val').textContent = SITE_STATUS.onlineCount + ' agents';
+  document.getElementById('home-hrp-val').textContent = SITE_STATUS.hrpMessage;
+  const card = document.getElementById('home-status-card');
+  card.style.borderTopColor = SITE_STATUS.rpCode === 'rouge' ? 'var(--red)' : SITE_STATUS.rpCode === 'orange' ? 'var(--amber)' : 'var(--green)';
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showView(view){
+  ['home','auth','member','admin','rules'].forEach(v => {
+    document.getElementById('view-' + v).classList.toggle('hide', v !== view);
+  });
+  document.querySelectorAll('#main-nav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+
+  if(view === 'member') renderMemberView();
+  if(view === 'admin') renderAdminView();
+}
+function openRules(){ showView('rules'); }
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ============================================================
+   AUTH (simulée)
+   ============================================================ */
+function setAuthTab(tab){
+  document.getElementById('auth-tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('auth-tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('auth-login').classList.toggle('hide', tab !== 'login');
+  document.getElementById('auth-register').classList.toggle('hide', tab !== 'register');
+}
+
+async function mockLogin(provider){
+  if(PROFILE){
+    showView('member');
+    return;
+  }
+  // Pas encore de compte -> on redirige vers l'inscription en pré-remplissant le fournisseur
+  setAuthTab('register');
+  PROFILE_PENDING_PROVIDER = provider;
+  alert("Dans une vraie version, ceci ouvrirait la fenêtre d'authentification " + provider + " (OAuth2). Ici, complète le formulaire d'inscription pour simuler la création du compte.");
+}
+let PROFILE_PENDING_PROVIDER = 'Démo';
+
+async function registerAccount(){
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const passwordConfirm = document.getElementById('reg-password-confirm').value;
+  const birth = document.getElementById('reg-birth').value;
+  const discord = document.getElementById('reg-discord').value.trim();
+  const roblox = document.getElementById('reg-roblox').value.trim();
+  const acceptedRules = document.getElementById('reg-rules').checked;
+
+  if(!email || !password || !birth || !discord || !roblox){
+    alert("Merci de remplir tous les champs.");
+    return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    alert("Adresse email invalide.");
+    return;
+  }
+  if(password.length < 8){
+    alert("Le mot de passe doit contenir au moins 8 caractères.");
+    return;
+  }
+  if(password !== passwordConfirm){
+    alert("Les deux mots de passe ne correspondent pas.");
+    return;
+  }
+  if(!acceptedRules){
+    alert("Tu dois accepter le règlement intérieur pour créer un compte.");
+    return;
+  }
+
+  PROFILE = {
+    email,
+    password, // ⚠ démo uniquement — voir note de sécurité dans le pied de page
+    pseudoDiscord: discord,
+    pseudoRoblox: roblox,
+    birth,
+    provider: PROFILE_PENDING_PROVIDER,
+    clearance: 0,
+    faction: null,
+    appliedRoles: [],
+    joinedAt: new Date().toISOString()
+  };
+  await storeSet(PROFILE_KEY, PROFILE, false);
+  refreshAuthState();
+  showView('member');
+}
+
+async function loginWithPassword(){
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if(!email || !password){
+    alert("Merci de remplir l'email et le mot de passe.");
+    return;
+  }
+  const stored = await storeGet(PROFILE_KEY, false);
+  if(!stored || !stored.email){
+    alert("Aucun compte trouvé. Crée d'abord un compte avec cette adresse email.");
+    setAuthTab('register');
+    document.getElementById('reg-email').value = email;
+    return;
+  }
+  if(stored.email.toLowerCase() !== email.toLowerCase() || stored.password !== password){
+    alert("Email ou mot de passe incorrect.");
+    return;
+  }
+  PROFILE = stored;
+  refreshAuthState();
+  showView('member');
+}
+
+function logout(){
+  PROFILE = null;
+  refreshAuthState();
+  showView('home');
+}
+
+function refreshAuthState(){
+  const chip = document.getElementById('clearance-chip');
+  const adminBtn = document.getElementById('nav-admin-btn');
+  const authBtn = document.getElementById('nav-auth-btn');
+
+  if(PROFILE){
+    chip.textContent = 'NIVEAU ' + PROFILE.clearance + ' — ' + PROFILE.pseudoDiscord;
+    authBtn.textContent = 'Mon compte';
+    adminBtn.classList.toggle('hide', PROFILE.clearance < 5);
+  } else {
+    chip.textContent = 'NON IDENTIFIÉ';
+    authBtn.textContent = 'Connexion';
+    adminBtn.classList.add('hide');
+  }
+}
+
+/* ============================================================
+   MEMBER SPACE
+   ============================================================ */
+function renderMemberView(){
+  document.getElementById('member-locked').classList.toggle('hide', !!PROFILE);
+  document.getElementById('member-content').classList.toggle('hide', !PROFILE);
+  if(!PROFILE) return;
+
+  document.getElementById('id-avatar').textContent = PROFILE.pseudoRoblox.charAt(0).toUpperCase();
+  document.getElementById('id-name').textContent = PROFILE.pseudoRoblox + '  ·  ' + PROFILE.pseudoDiscord;
+  document.getElementById('id-meta').textContent = 'Faction : ' + (PROFILE.faction || 'Aucune — Classe-D / Nouveau') + '  ·  Connecté via ' + PROFILE.provider;
+  document.getElementById('id-clearance').textContent = 'NIVEAU ' + PROFILE.clearance;
+
+  document.querySelectorAll('#member-nav-list button').forEach(b => b.classList.toggle('active', b.dataset.tab === currentMemberTab));
+  setMemberTab(currentMemberTab);
+}
+
+async function setMemberTab(tab){
+  currentMemberTab = tab;
+  document.querySelectorAll('#member-nav-list button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const box = document.getElementById('member-tab-content');
+  box.innerHTML = '<div class="empty-state">Chargement…</div>';
+
+  const renderers = {
+    candidatures: renderCandidatures,
+    reglements: renderReglements,
+    animations: renderAnimations,
+    messagerie: renderMessagerie,
+    forum: renderForum,
+    equipe: renderEquipe,
+    credits: renderCredits,
+    boutique: renderBoutique,
+    signalements: renderSignalements,
+    avis: renderAvis,
+    profil: renderProfil,
+  };
+  await renderers[tab](box);
+}
+
+async function renderCandidatures(box){
+  box.innerHTML = `
+    <h3>Candidatures HRP — Recrutement Staff</h3>
+    <p class="desc">Postule pour rejoindre l'équipe : Buildeur, Modérateur, Morpheur ou Animateur.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:20px;">
+      ${Object.keys(GRADES).map(role => `
+        <div style="background:var(--panel-2); border:1px solid var(--line); border-radius:6px; padding:14px;">
+          <div style="font-weight:700; margin-bottom:6px;">${role}</div>
+          <div class="small-note" style="margin-bottom:10px;">Grade de départ : ${GRADES[role][0]}</div>
+          <button class="btn btn-sm btn-block" onclick="applyRole('${role}')" ${PROFILE.appliedRoles.includes(role) ? 'disabled' : ''}>
+            ${PROFILE.appliedRoles.includes(role) ? 'Candidature envoyée' : 'Postuler'}
+          </button>
+        </div>`).join('')}
+    </div>
+    <div class="section-title" style="margin-top:24px;">Progression des grades</div>
+    ${Object.entries(GRADES).map(([role, steps]) => `
+      <div style="margin-bottom:10px;">
+        <div style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:4px;">${role.toUpperCase()}</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          ${steps.map((s,i) => `<span class="pill ${i===0?'pill-muted':'pill-green'}">${s}</span>`).join('<span style="color:var(--muted)">→</span>')}
+        </div>
+      </div>`).join('')}
+  `;
+}
+async function applyRole(role){
+  PROFILE.appliedRoles.push(role);
+  await storeSet(PROFILE_KEY, PROFILE, false);
+  await storeListAppend(APPLICATIONS_KEY, {
+    id: 'app_' + Date.now(),
+    role, pseudoDiscord: PROFILE.pseudoDiscord, pseudoRoblox: PROFILE.pseudoRoblox,
+    status:'en_attente', date: new Date().toISOString()
+  }, true);
+  renderMemberView();
+}
+
+async function renderReglements(box){
+  const sections = [
+    {t:'Règlement Général', c: RULES_TEXT},
+    {t:'Règlement In-Game', c:'Respect du RP en toute circonstance. Le PowerRP, MetaRP et le Fail-RP sont interdits. Toute anomalie doit être traitée selon son protocole de confinement.'},
+    {t:'Règlement Site Web', c: RULES_TEXT},
+  ];
+  box.innerHTML = `
+    <h3>Règlements & Lore</h3>
+    <p class="desc">Le staff peut modifier ces règlements à tout moment.</p>
+    ${sections.map((s,i) => `
+      <div class="accordion-item">
+        <div class="accordion-head" onclick="toggleAcc(${i})">${s.t} <span>▾</span></div>
+        <div class="accordion-body" id="acc-${i}">${escapeHtml(s.c)}</div>
+      </div>`).join('')}
+  `;
+}
+function toggleAcc(i){ document.getElementById('acc-' + i).classList.toggle('open'); }
+
+async function renderAnimations(box){
+  box.innerHTML = `
+    <h3>Animations</h3>
+    <p class="desc">Annonces et calendrier des événements RP / HRP.</p>
+    <div class="post"><div class="head"><span>ANNONCE</span><span>Aujourd'hui</span></div><div class="body">🎭 Événement « Brèche de confinement — SCP-███ » ce week-end. Inscriptions ouvertes auprès des Animateurs.</div></div>
+    <div class="post"><div class="head"><span>ANNONCE</span><span>Cette semaine</span></div><div class="body">📢 Recrutement d'Animateurs ouvert — voir la catégorie Candidatures HRP.</div></div>
+    <p class="small-note">Le staff Animation peut publier de nouvelles annonces depuis le panneau d'administration.</p>
+  `;
+}
+
+async function renderMessagerie(box){
+  box.innerHTML = `
+    <h3>Messagerie interne</h3>
+    <p class="desc">Messages d'urgence, messages RP et notifications HRP (sanctions).</p>
+    <div class="post"><div class="head"><span class="pill pill-red">URGENCE</span><span>—</span></div><div class="body">Aucun message d'urgence actif.</div></div>
+    <div class="post"><div class="head"><span class="pill pill-muted">RP</span><span>—</span></div><div class="body">Boîte de réception RP vide.</div></div>
+    <div class="post"><div class="head"><span class="pill pill-amber">HRP</span><span>—</span></div><div class="body">Aucune sanction notifiée sur ce compte.</div></div>
+  `;
+}
+
+async function renderForum(box){
+  const posts = (await storeGet(FORUM_KEY, true)) || [];
+  box.innerHTML = `
+    <h3>Forum</h3>
+    <div class="shared-note">⚠ Les publications du forum sont visibles par tous les visiteurs de cet artefact.</div>
+    <div class="field">
+      <textarea id="forum-input" rows="3" placeholder="Écrire une annonce ou un message..."></textarea>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="postForum()">Publier</button>
+    <div style="margin-top:20px;">
+      ${posts.length ? posts.map(p => `
+        <div class="post"><div class="head"><span>${escapeHtml(p.author)}</span><span>${new Date(p.date).toLocaleString('fr-FR')}</span></div><div class="body">${escapeHtml(p.text)}</div></div>
+      `).join('') : '<div class="empty-state">Aucune publication pour l’instant.</div>'}
+    </div>
+  `;
+}
+async function postForum(){
+  const text = document.getElementById('forum-input').value.trim();
+  if(!text) return;
+  await storeListAppend(FORUM_KEY, {author: PROFILE.pseudoRoblox, text, date: new Date().toISOString()}, true);
+  renderForum(document.getElementById('member-tab-content'));
+}
+
+async function renderEquipe(box){
+  box.innerHTML = `
+    <h3>Mon Équipe</h3>
+    <table class="data-table">
+      <tr><th>Faction</th><td>${PROFILE.faction || 'Non assignée (Classe-D / Nouveau)'}</td></tr>
+    </table>
+    <div class="section-title">Mes candidatures</div>
+    ${PROFILE.appliedRoles.length ? `
+      <table class="data-table">
+        <tr><th>Rôle</th><th>Statut</th></tr>
+        ${PROFILE.appliedRoles.map(r => `<tr><td>${r}</td><td><span class="pill pill-amber">En attente</span></td></tr>`).join('')}
+      </table>` : '<div class="empty-state">Aucune candidature envoyée.</div>'}
+  `;
+}
+
+async function renderCredits(box){
+  box.innerHTML = `
+    <h3>Équipe du Projet</h3>
+    <table class="data-table">
+      <tr><th>Rôle</th><th>Membre</th></tr>
+      <tr><td>Fondateur</td><td>—</td></tr>
+      <tr><td>Co-Directeur</td><td>—</td></tr>
+      <tr><td>Manager Modération</td><td>—</td></tr>
+      <tr><td>Manager Build</td><td>—</td></tr>
+      <tr><td>Développeur Site Web</td><td>—</td></tr>
+      <tr><td>Développeur Map</td><td>—</td></tr>
+    </table>
+    <p class="small-note" style="margin-top:12px;">Ce tableau est géré par le staff depuis le panneau d'administration (à venir).</p>
+  `;
+}
+
+async function renderBoutique(box){
+  box.innerHTML = `
+    <h3>Boutique</h3>
+    <div class="empty-state">🛒 La catégorie n'est pas activée [ EN DÉVELOPPEMENT ].</div>
+  `;
+}
+
+async function renderSignalements(box){
+  box.innerHTML = `
+    <h3>Signalements (HRP)</h3>
+    <p class="desc">Signale un joueur ou un problème sur la map.</p>
+    <div class="field"><label>Type</label>
+      <select id="rep-type"><option value="joueur">Joueur</option><option value="map">Map</option></select>
+    </div>
+    <div class="field"><label>Pseudo Discord / Roblox concerné</label><input id="rep-target" placeholder="Pseudo du joueur"></div>
+    <div class="field"><label>Raison</label><textarea id="rep-reason" rows="3" placeholder="Décris les faits en détail..."></textarea></div>
+    <div class="field"><label>Preuve (lien image / vidéo / clip)</label><input id="rep-proof" placeholder="https://..."></div>
+    <button class="btn btn-primary" onclick="submitReport()">Envoyer le signalement</button>
+    <div class="section-title">Mes signalements envoyés</div>
+    <div id="my-reports"></div>
+  `;
+  const reports = ((await storeGet(REPORTS_KEY, true)) || []).filter(r => r.by === PROFILE.pseudoDiscord);
+  document.getElementById('my-reports').innerHTML = reports.length ? reports.map(r => `
+    <div class="post"><div class="head"><span>${r.type.toUpperCase()} — ${escapeHtml(r.target)}</span><span>${new Date(r.date).toLocaleDateString('fr-FR')}</span></div><div class="body">${escapeHtml(r.reason)}</div></div>
+  `).join('') : '<div class="empty-state">Aucun signalement envoyé.</div>';
+}
+async function submitReport(){
+  const type = document.getElementById('rep-type').value;
+  const target = document.getElementById('rep-target').value.trim();
+  const reason = document.getElementById('rep-reason').value.trim();
+  const proof = document.getElementById('rep-proof').value.trim();
+  if(!target || !reason || !proof){ alert('Merci de remplir tous les champs, la preuve est obligatoire.'); return; }
+  await storeListAppend(REPORTS_KEY, {type, target, reason, proof, by: PROFILE.pseudoDiscord, date: new Date().toISOString(), treated:false}, true);
+  setMemberTab('signalements');
+}
+
+async function renderAvis(box){
+  const reviews = (await storeGet(REVIEWS_KEY, true)) || [];
+  box.innerHTML = `
+    <h3>Avis & Évaluations</h3>
+    <div class="shared-note">⚠ Les avis publiés ici sont visibles par tous.</div>
+    <div class="field"><label>Concerne (pseudo)</label><input id="rev-target" placeholder="Pseudo du joueur ou du staff"></div>
+    <div class="field"><label>Type d'avis</label>
+      <select id="rev-role"><option>RP Joueur</option><option>Modérateur</option><option>Buildeur</option><option>Animateur</option><option>Morpheur</option></select>
+    </div>
+    <div class="field"><label>Avis</label><textarea id="rev-text" rows="3" placeholder="Justifie ton avis..."></textarea></div>
+    <button class="btn btn-primary btn-sm" onclick="postReview()">Publier l'avis</button>
+    <div style="margin-top:16px;">
+      ${reviews.length ? reviews.map(r => `
+        <div class="post"><div class="head"><span>${escapeHtml(r.target)} · ${r.role}</span><span>${new Date(r.date).toLocaleDateString('fr-FR')}</span></div><div class="body">${escapeHtml(r.text)}</div></div>
+      `).join('') : '<div class="empty-state">Aucun avis pour l’instant.</div>'}
+    </div>
+  `;
+}
+async function postReview(){
+  const target = document.getElementById('rev-target').value.trim();
+  const role = document.getElementById('rev-role').value;
+  const text = document.getElementById('rev-text').value.trim();
+  if(!target || !text) return;
+  await storeListAppend(REVIEWS_KEY, {target, role, text, by: PROFILE.pseudoRoblox, date: new Date().toISOString()}, true);
+  setMemberTab('avis');
+}
+
+async function renderProfil(box){
+  box.innerHTML = `
+    <h3>Mon Profil</h3>
+    <table class="data-table">
+      <tr><th>Adresse email</th><td>${escapeHtml(PROFILE.email || '—')}</td></tr>
+      <tr><th>Pseudo Discord</th><td>${escapeHtml(PROFILE.pseudoDiscord)}</td></tr>
+      <tr><th>Pseudo Roblox</th><td>${escapeHtml(PROFILE.pseudoRoblox)}</td></tr>
+      <tr><th>Fournisseur de connexion</th><td>${PROFILE.provider}</td></tr>
+      <tr><th>Membre depuis</th><td>${new Date(PROFILE.joinedAt).toLocaleDateString('fr-FR')}</td></tr>
+      <tr><th>Niveau d'accréditation</th><td>${PROFILE.clearance}</td></tr>
+    </table>
+    <div class="divider"></div>
+    <p class="small-note" style="margin-bottom:10px;">🔧 <strong>Bascule de démonstration</strong> — dans une vraie version, le niveau d'accréditation est attribué manuellement en base de données par un Fondateur, jamais par le joueur lui-même.</p>
+    <button class="btn btn-sm" onclick="toggleDemoStaff()">${PROFILE.clearance >= 5 ? 'Redevenir Niveau 0 (démo)' : 'Simuler Niveau 5 / Accès Admin (démo)'}</button>
+    <div class="divider"></div>
+    <button class="btn btn-ghost" onclick="logout()">Se déconnecter</button>
+  `;
+}
+async function toggleDemoStaff(){
+  PROFILE.clearance = PROFILE.clearance >= 5 ? 0 : 5;
+  await storeSet(PROFILE_KEY, PROFILE, false);
+  refreshAuthState();
+  renderMemberView();
+}
+
+/* ============================================================
+   ADMIN PANEL
+   ============================================================ */
+function renderAdminView(){
+  const canAccess = PROFILE && PROFILE.clearance >= 5;
+  document.getElementById('admin-locked').classList.toggle('hide', canAccess);
+  document.getElementById('admin-content').classList.toggle('hide', !canAccess);
+  if(!canAccess) return;
+  setAdminTab(currentAdminTab);
+}
+
+async function setAdminTab(tab){
+  currentAdminTab = tab;
+  document.querySelectorAll('#admin-nav-list button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const box = document.getElementById('admin-tab-content');
+  const renderers = {
+    status: renderAdminStatus,
+    sanctions: renderAdminSanctions,
+    logs: renderAdminLogs,
+    'candidatures-admin': renderAdminCandidatures,
+    'signalements-admin': renderAdminSignalements,
+  };
+  await renderers[tab](box);
+}
+
+async function renderAdminStatus(box){
+  box.innerHTML = `
+    <h3>État du site</h3>
+    <p class="desc">Modifie le bandeau visible sur tout le site en temps réel.</p>
+    <div class="field"><label>Code d'alerte RP</label>
+      <select id="adm-code">
+        <option value="vert" ${SITE_STATUS.rpCode==='vert'?'selected':''}>Code Vert</option>
+        <option value="orange" ${SITE_STATUS.rpCode==='orange'?'selected':''}>Code Orange</option>
+        <option value="rouge" ${SITE_STATUS.rpCode==='rouge'?'selected':''}>Code Rouge — Brèche de confinement</option>
+      </select>
+    </div>
+    <div class="field"><label>Message RP (bandeau)</label><textarea id="adm-rp-msg" rows="2">${escapeHtml(SITE_STATUS.rpMessage)}</textarea></div>
+    <div class="field"><label>Message HRP (bandeau)</label><textarea id="adm-hrp-msg" rows="2">${escapeHtml(SITE_STATUS.hrpMessage)}</textarea></div>
+    <div class="field"><label>Agents en ligne (affichage)</label><input type="number" id="adm-online" value="${SITE_STATUS.onlineCount}"></div>
+    <button class="btn btn-primary" onclick="saveSiteStatus()">Mettre à jour le bandeau</button>
+    <div class="divider"></div>
+    <h3 style="font-size:18px;">Fermeture d'urgence</h3>
+    <p class="desc">Diffuse un message d'alerte massif sur le site (et, dans une vraie version, sur Discord).</p>
+    <button class="btn" style="border-color:var(--red); color:var(--red);" onclick="toggleMaintenance()">${SITE_STATUS.maintenance ? 'Rouvrir le site' : 'Fermer le site (urgence)'}</button>
+  `;
+}
+async function saveSiteStatus(){
+  SITE_STATUS.rpCode = document.getElementById('adm-code').value;
+  SITE_STATUS.rpMessage = document.getElementById('adm-rp-msg').value;
+  SITE_STATUS.hrpMessage = document.getElementById('adm-hrp-msg').value;
+  SITE_STATUS.onlineCount = parseInt(document.getElementById('adm-online').value) || 0;
+  await storeSet(SITE_STATUS_KEY, SITE_STATUS, true);
+  await storeListAppend(LOGS_KEY, {action:'Mise à jour du bandeau', by:PROFILE.pseudoDiscord, date:new Date().toISOString()}, true);
+  renderTicker(); applyStatusToHome();
+  alert('Bandeau mis à jour.');
+}
+async function toggleMaintenance(){
+  SITE_STATUS.maintenance = !SITE_STATUS.maintenance;
+  if(SITE_STATUS.maintenance){
+    const reason = prompt('Raison de la fermeture :') || 'Non précisée';
+    SITE_STATUS.maintenanceReason = reason;
+    SITE_STATUS.hrpMessage = '🚨 SITE FERMÉ — ' + reason;
+  } else {
+    SITE_STATUS.hrpMessage = 'Le site est de nouveau ouvert.';
+  }
+  await storeSet(SITE_STATUS_KEY, SITE_STATUS, true);
+  await storeListAppend(LOGS_KEY, {action: SITE_STATUS.maintenance ? 'Fermeture du site' : 'Réouverture du site', by:PROFILE.pseudoDiscord, date:new Date().toISOString()}, true);
+  renderTicker(); applyStatusToHome();
+  renderAdminStatus(document.getElementById('admin-tab-content'));
+}
+
+async function renderAdminSanctions(box){
+  box.innerHTML = `
+    <h3>Sanctions</h3>
+    <p class="desc">Applique une sanction à un joueur (simulé — journalisé dans les logs).</p>
+    <div class="field"><label>Pseudo Discord / Roblox</label><input id="san-target"></div>
+    <div class="field"><label>Type de sanction</label>
+      <select id="san-type">
+        <option>Avertissement (Warn)</option>
+        <option>Kick</option>
+        <option>Soft Ban</option>
+        <option>Ban temporaire</option>
+        <option>Ban IP / Empreinte navigateur</option>
+      </select>
+    </div>
+    <div class="field"><label>Raison</label><textarea id="san-reason" rows="2"></textarea></div>
+    <button class="btn btn-primary" onclick="applySanction()">Appliquer la sanction</button>
+  `;
+}
+async function applySanction(){
+  const target = document.getElementById('san-target').value.trim();
+  const type = document.getElementById('san-type').value;
+  const reason = document.getElementById('san-reason').value.trim();
+  if(!target || !reason){ alert('Complète le pseudo et la raison.'); return; }
+  await storeListAppend(LOGS_KEY, {action: `${type} appliqué à ${target}`, reason, by:PROFILE.pseudoDiscord, date:new Date().toISOString()}, true);
+  alert('Sanction enregistrée dans les logs. (Notification Discord réelle nécessite un bot backend.)');
+  document.getElementById('san-target').value=''; document.getElementById('san-reason').value='';
+}
+
+async function renderAdminLogs(box){
+  const logs = (await storeGet(LOGS_KEY, true)) || [];
+  box.innerHTML = `
+    <h3>Logs de modération</h3>
+    ${logs.length ? `<table class="data-table"><tr><th>Action</th><th>Par</th><th>Date</th></tr>
+      ${logs.map(l => `<tr><td>${escapeHtml(l.action)}${l.reason ? ' — <span class="small-note">'+escapeHtml(l.reason)+'</span>' : ''}</td><td>${escapeHtml(l.by)}</td><td>${new Date(l.date).toLocaleString('fr-FR')}</td></tr>`).join('')}
+      </table>` : '<div class="empty-state">Aucun log pour l’instant.</div>'}
+  `;
+}
+
+async function renderAdminCandidatures(box){
+  const apps = (await storeGet(APPLICATIONS_KEY, true)) || [];
+  box.innerHTML = `
+    <h3>Candidatures reçues</h3>
+    ${apps.length ? `<table class="data-table"><tr><th>Rôle</th><th>Discord</th><th>Roblox</th><th>Statut</th></tr>
+      ${apps.map(a => `<tr><td>${a.role}</td><td>${escapeHtml(a.pseudoDiscord)}</td><td>${escapeHtml(a.pseudoRoblox)}</td><td><span class="pill pill-amber">${a.status}</span></td></tr>`).join('')}
+      </table>` : '<div class="empty-state">Aucune candidature reçue.</div>'}
+  `;
+}
+
+async function renderAdminSignalements(box){
+  const reports = (await storeGet(REPORTS_KEY, true)) || [];
+  box.innerHTML = `
+    <h3>Signalements reçus</h3>
+    ${reports.length ? `<table class="data-table"><tr><th>Type</th><th>Cible</th><th>Raison</th><th>Par</th></tr>
+      ${reports.map(r => `<tr><td>${r.type}</td><td>${escapeHtml(r.target)}</td><td>${escapeHtml(r.reason)}</td><td>${escapeHtml(r.by)}</td></tr>`).join('')}
+      </table>` : '<div class="empty-state">Aucun signalement reçu.</div>'}
+  `;
+}
+
+init();
+</script>
+</body>
+</html>
