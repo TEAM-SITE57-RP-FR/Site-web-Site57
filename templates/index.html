@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Site-57 RP FR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body class="theme-default">
+  <header>
+    <div class="header-inner">
+      <h1>Site‑57 RP FR</h1>
+      <nav>
+        <a href="/">Accueil</a>
+        <a href="/login">Se connecter</a>
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('profile', user_id=current_user.id) }}">Mon Profil</a>
+          <a href="{{ url_for('logout') }}">Déconnexion</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <!-- Bandeau d'information -->
+  <div id="bandeau" class="bandeau bandeau-rp">
+    <div id="bandeau-level">RP — Code Vert</div>
+    <div id="bandeau-message">Code Vert — Tout est stable.</div>
+  </div>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Bienvenue sur le Site‑57 !</h2>
+      <p>Le Site‑57 est situé dans le nord de la France à une localisation inconnue. Ce site est classifié « TOP SECRET ». Cette installation contient de nombreuses anomalies hors du commun, potentiellement dangereuses pour l'humanité...</p>
+      <div class="actions">
+        <a class="btn" href="/login">Se connecter / Créer un compte</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <h3>Espace Membre</h3>
+      <ul>
+        <li>Candidatures HRP, Règlements & Lore</li>
+        <li>Messagerie interne, Tickets de support</li>
+        <li>Profil avec accréditation et badge virtuel</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <small>© Site‑57 RP FR — Projet communautaire</small>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/banner.js') }}"></script>
+</body>
+</html>

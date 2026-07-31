@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profil — {{ user.username }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <main class="container">
+    <div class="profile-card">
+      <img src="{{ user.avatar_url or url_for('static', filename='img/default-avatar.png') }}" alt="avatar" class="avatar"/>
+      <h2>{{ user.username }}</h2>
+      <p>Faction : (à renseigner)</p>
+      <p>Accréditation : Niveau {{ user.accreditation }}</p>
+      <p>{{ user.bio or 'Aucune description.' }}</p>
+    </div>
+  </main>
+</body>
+</html>
